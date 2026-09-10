@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./refinement.css";
 
-const siteUrl = "https://your-domain.example"; // Replace before deploying.
+const siteUrl = "http://129.80.240.109";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

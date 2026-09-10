@@ -30,8 +30,12 @@ Then open `http://localhost:3000`. Stop the container with `docker stop umair-po
 
 ## Contact form
 
-The form validates in the browser and displays a clear success state, but does not send email yet — this avoids pretending a message was delivered. Connect the form to your preferred endpoint (Resend, Formspree, Basin, or a Next.js route) before publishing. Update the GitHub, email, and resume placeholders in the footer when their real URLs are available.
+The form validates in the browser and displays a clear success state, but does not send email yet — this avoids pretending a message was delivered. Connect it to a preferred endpoint (Resend, Formspree, Basin, or a Next.js route) before relying on it for enquiries.
 
-## Deploy
+## Continuous deployment
 
-The app is deployable on Vercel with the standard Next.js settings: import the repository, set no special build command (default `npm run build`), and deploy. For another host, run `npm run build` and serve with `npm start`.
+Pushing to `main` deploys the site to `129.80.240.109`. The workflow connects over SSH, updates `/opt/umair-devops-site`, builds the Docker image, then restarts the site service.
+
+Before the first deployment, add the private half of a dedicated server-login key as the repository secret `DEPLOY_SSH_KEY`. Its matching public key must be in `/home/ubuntu/.ssh/authorized_keys` on the server.
+
+The server is expected to have Git, Docker, Nginx, and the `umair-devops-portfolio` systemd service installed.
