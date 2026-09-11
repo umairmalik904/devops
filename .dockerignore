@@ -6,3 +6,5 @@ npm-debug.log*
 README.md
 /work
 /outputs
+!app/work/
+!app/work/**
