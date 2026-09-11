@@ -1,0 +1,7 @@
+import { ArrowRight } from "lucide-react";
+export function Topology() {
+  return <figure className="topology"><figcaption><span>REFLYS / SYSTEM TOPOLOGY</span><span>Application & supporting services</span></figcaption><div className="topology-path"><div className="topology-entry"><span className="node-label">ENTRY</span><strong>Nginx</strong><small>Reverse proxy</small></div><div className="topology-services"><div><span className="node-label">FRONTEND</span><strong>Next.js</strong></div><div><span className="node-label">BACKEND</span><strong>Laravel / Node.js</strong></div><div><span className="node-label">ASYNC / REALTIME</span><strong>Workers / sockets</strong></div></div><div className="topology-data"><span className="node-label">DATA & MESSAGING</span><strong>PostgreSQL · Cassandra</strong><strong>Redis · Kafka</strong></div></div><div className="topology-observe"><span>Application & container logs</span><ArrowRight size={15} /><strong>Alloy</strong><ArrowRight size={15} /><strong>Loki</strong><ArrowRight size={15} /><strong>Grafana</strong></div></figure>;
+}
+export function Flow({ nodes, label, cluster = false }: { nodes: string[]; label: string; cluster?: boolean }) {
+  return <figure className={cluster ? "flow cluster-flow" : "flow"} aria-label={label}><div>{nodes.map((node, i) => <div className="flow-step" key={`${node}-${i}`}><span>{node}</span>{i < nodes.length - 1 && <ArrowRight size={16} aria-hidden="true" />}</div>)}</div>{cluster && <figcaption>Corosync / quorum / HA-managed workloads</figcaption>}</figure>;
+}

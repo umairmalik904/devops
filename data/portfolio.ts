@@ -1,34 +1,129 @@
-export const services = [
-  { symbol: "☁", title: "Cloud & Infrastructure", description: "Set up cloud foundations that are clear to operate, from AWS services and access controls to storage and networking.", tags: ["AWS", "EC2", "VPC"] },
-  { symbol: "◇", title: "Docker & Containerization", description: "Package applications consistently, solve build and networking issues, and prepare containers for production.", tags: ["Docker", "Compose", "Swarm"] },
-  { symbol: "↗", title: "CI/CD", description: "Automate releases so your team does not have to manually SSH into a server for every deployment.", tags: ["GitHub Actions", "Pipelines"] },
-  { symbol: "▣", title: "Server & Linux Administration", description: "Configure Linux servers, Nginx, processes, networking, and the operational details behind reliable apps.", tags: ["Linux", "Nginx", "PM2"] },
-  { symbol: "⌕", title: "Production Troubleshooting", description: "Find issues that sit between the application, containers, database, DNS, reverse proxy, and environment.", tags: ["Debugging", "Incident response"] },
-  { symbol: "◫", title: "Database & Infrastructure", description: "Resolve connectivity and environment issues around PostgreSQL, MySQL, Redis, migrations, and backups.", tags: ["PostgreSQL", "MySQL", "Redis"] },
-  { symbol: "⇄", title: "Deployment & Migration", description: "Move applications safely between environments and support staging, production cutovers, domains, and SSL.", tags: ["Staging", "SSL", "DNS"] },
-  { symbol: "◎", title: "Infrastructure Consulting", description: "Review an existing setup and identify practical improvements for clarity, safety, and maintainability.", tags: ["Review", "Architecture"] }
-];
-export const caseStudies = [
-  { title: "Production domain redirect debugging", problem: "A production application had a www-to-apex redirect issue.", investigation: "Reviewed DNS, domain configuration, and redirect behavior across the production path.", solution: "Corrected the responsible redirect and domain configuration.", result: "The intended domain behavior was restored and verified in production.", technologies: ["DNS", "Domains", "Redirects"] },
-  { title: "Failed production pipeline investigation", problem: "A CI/CD workflow was failing and blocking a production deployment.", investigation: "Traced the pipeline and deployment path to isolate the underlying failure.", solution: "Resolved the deployment issue and restored the workflow.", result: "The deployment process was functioning again.", technologies: ["GitHub Actions", "Docker", "CI/CD"] },
-  { title: "PostgreSQL / container connectivity", problem: "An application through PM2 could not reach its expected PostgreSQL database in Docker.", investigation: "Compared environment variables, container names, ports, and actual database names.", solution: "Identified discrepancies in the application-to-database configuration.", result: "The connection path could be aligned with the intended database service.", technologies: ["PostgreSQL", "Docker", "PM2", "Linux"] },
-  { title: "Production 404 investigation", problem: "A production application began returning 404 responses.", investigation: "Investigated the live state and recent changes affecting application routing.", solution: "Identified the problematic merge, reverted it, and verified the application.", result: "The application was restored to a functioning production state.", technologies: ["Incident response", "Rollback", "Production"] },
-  { title: "S3 + CloudFront infrastructure", problem: "Application assets and images needed a cloud delivery setup.", investigation: "Mapped the storage and delivery requirements for the application assets.", solution: "Configured an S3 bucket with a CloudFront distribution.", result: "A CDN-backed asset delivery path was established.", technologies: ["AWS S3", "CloudFront", "CDN"] },
-  { title: "Multi-environment infrastructure", problem: "Development, QA, and production used different apps, ports, processes, databases, and proxies.", investigation: "Worked through environment boundaries, service mappings, and operating processes.", solution: "Supported the environment-specific infrastructure and deployment architecture.", result: "The moving parts of separate environments were managed with clearer isolation.", technologies: ["Nginx", "Containers", "Databases", "Networking"] }
-];
-export const projects = [
-  { name: "Production Domain Recovery", private: true, description: "A live application had an incorrect www-to-apex redirect path. The work focused on restoring predictable domain behaviour without exposing client details.", role: "Investigated DNS and domain configuration, corrected the redirect path, and verified the production result.", technologies: ["DNS", "Domains", "Redirects"] },
-  { name: "CI/CD Pipeline Recovery", private: true, description: "A failing deployment workflow was blocking a production release. The engagement focused on finding the failure in the delivery path and getting releases moving again.", role: "Traced the pipeline, resolved the deployment issue, and restored a working release workflow.", technologies: ["GitHub Actions", "Docker", "CI/CD"] },
-  { name: "Multi-Environment Application Operations", private: true, description: "An application estate spanning development, QA, and production needed clearer service boundaries and dependable day-to-day operations.", role: "Supported environment-specific servers, proxies, containers, databases, ports, and deployment processes.", technologies: ["Nginx", "Docker", "PostgreSQL", "Linux"] }
-];
-type TechItem = { name: string; level?: "foundational" };
-type TechGroup = { name: string; items: TechItem[] };
+export type Project = {
+  id: string; title: string; category: string; summary: string; problem: string;
+  architecture: string[]; implementation: string[]; troubleshooting: string;
+  result: string; technologies: string[]; published: boolean;
+};
 
-export const techGroups: TechGroup[] = [
-  { name: "Cloud", items: ["AWS","EC2","S3","CloudFront","VPC","IAM","EBS","EFS","ECS"].map(name => ({ name })) },
-  { name: "DevOps", items: ["Docker","Docker Compose","Docker Swarm","GitHub Actions","CI/CD","Terraform"].map(name => ({ name, level: name === "Terraform" ? "foundational" : undefined })) },
-  { name: "Servers", items: ["Linux","Ubuntu","Nginx","PM2"].map(name => ({ name })) },
-  { name: "Databases", items: ["PostgreSQL","MySQL","Redis"].map(name => ({ name })) },
-  { name: "Development", items: ["Node.js","Next.js","React","PHP","Laravel","Python","FastAPI"].map(name => ({ name })) },
-  { name: "Tools", items: ["Git","GitHub","pgAdmin","REST APIs"].map(name => ({ name })) }
+export const projects: Project[] = [
+  {
+    id: "reflys-distributed-infrastructure", title: "Reflys / Distributed infrastructure", category: "Production systems",
+    summary: "Operating a distributed application across frontend, backend, background workers, realtime services and data infrastructure.",
+    problem: "Reflys ran across approximately five to seven servers. Separate application roles, container workloads and supporting databases made deployment, service connectivity and production diagnosis an infrastructure-wide responsibility.",
+    architecture: ["Nginx / frontend", "Backend services", "Background workers / sockets", "PostgreSQL / Cassandra / Redis / Kafka"],
+    implementation: ["Managed Docker deployments for Laravel, Next.js and Node.js workloads across separate Linux servers.", "Operated frontend, backend, background-processing and realtime services independently.", "Worked with PostgreSQL, Cassandra keyspaces and CQL, Redis key prefixes, and Kafka container operations.", "Investigated service networking and the operational constraints of running distributed workloads without private networking."],
+    troubleshooting: "Traced failures through Linux processes, Docker configuration, application logs and service connectivity. Investigations included Cassandra schema and query behavior, Redis key isolation, and communication between application servers.",
+    result: "Supported the operation of the distributed application and established a clearer understanding of its service boundaries, data dependencies and logging requirements.",
+    technologies: ["Linux", "Docker", "Nginx", "Laravel", "Next.js", "Node.js", "PostgreSQL", "Cassandra", "Redis", "Kafka"], published: true,
+  },
+  {
+    id: "reflys-observability", title: "Reflys / Centralized observability", category: "Observability",
+    summary: "Bringing application and container logs into a shared Grafana, Loki and Alloy logging architecture.",
+    problem: "Logs were spread across individual servers and containers, making it difficult to investigate related application failures from one place.",
+    architecture: ["Application / container logs", "Grafana Alloy", "Loki", "Grafana"],
+    implementation: ["Installed Loki and Grafana Alloy, configured collection pipelines and validated collector configuration.", "Verified Loki readiness, metrics endpoints, labels and log ingestion.", "Investigated Docker's json-file driver and container log locations alongside Laravel application logs.", "Designed collection for Laravel, Next.js, Node.js and system logs, with labels for filename, job, server and service_name."],
+    troubleshooting: "Investigated missing container log exports and Loki readiness problems. Checked source paths, the Docker logging driver, Alloy configuration and ingestion endpoints to locate gaps in the collection path.",
+    result: "Established the foundation for centralized logs and operational visibility across the distributed environment.",
+    technologies: ["Grafana", "Loki", "Grafana Alloy", "Prometheus metrics", "Docker", "Linux"], published: true,
+  },
+  {
+    id: "proxmox-high-availability", title: "Proxmox / Cluster infrastructure", category: "Virtualization & availability",
+    summary: "Three-node virtualization infrastructure, cluster networking and high-availability workloads.",
+    problem: "Linux and Windows workloads shared a three-node Proxmox environment. Cluster networking, quorum and VM availability needed to be understood together, including infrastructure supporting an Nginx load balancer.",
+    architecture: ["Three Proxmox nodes", "Corosync / quorum", "HA-managed VMs", "Linux / Windows / Nginx"],
+    implementation: ["Managed virtual machines and configuration in a three-node Proxmox VE cluster.", "Worked on cluster networking migration, quorum issues and high-availability workloads.", "Used pvecm, qm and ha-manager to inspect cluster, VM and availability behavior.", "Investigated HA for an Nginx load-balancer VM and evaluated Keepalived for network availability."],
+    troubleshooting: "Inspected VM state, cluster configuration and network dependencies when investigating availability behavior. Considered both hypervisor-level recovery and load-balancer connectivity.",
+    result: "Supported the cluster's Linux and Windows workloads and evaluated recovery paths for critical load-balancing infrastructure.",
+    technologies: ["Proxmox VE", "KVM", "Corosync", "Linux", "Windows Server", "Nginx", "Keepalived"], published: true,
+  },
+  {
+    id: "pfsense-networking", title: "pfSense / Multi-ISP networking", category: "Network engineering",
+    summary: "Routing, DNS, VPN and firewall operations between multiple upstream connections and private infrastructure.",
+    problem: "Private application, mail and VM infrastructure sat behind pfSense and multiple ISP connections. Routing, NAT and internal versus public DNS behavior affected access to the same services in different ways.",
+    architecture: ["Multiple ISPs", "pfSense / firewall", "Private LAN / VPN", "Applications / mail / VMs"],
+    implementation: ["Worked with multi-WAN routing, failover, NAT, port forwarding and firewall rules.", "Configured and diagnosed DNS Resolver overrides for internal service access.", "Investigated VPN traffic and private-network connectivity.", "Compared application access through internal and public DNS paths."],
+    troubleshooting: "Used curl and network-level checks to distinguish application failures from DNS, routing and browser-cache behavior. Investigated UDP VPN traffic and the effect of NAT on service reachability.",
+    result: "Diagnosed network access issues across upstream, firewall and private service boundaries, with clearer separation between DNS and application behavior.",
+    technologies: ["pfSense", "DNS", "NAT", "VPN", "Multi-WAN", "Firewall rules", "Linux"], published: true,
+  },
+  {
+    id: "email-infrastructure-migration", title: "Zimbra to Mailcow / Email infrastructure", category: "Platform migration",
+    summary: "Dockerized mail operations, mailbox migration tooling and troubleshooting across mail authentication and delivery.",
+    problem: "Moving an existing Zimbra environment toward Mailcow involved account creation, quotas, authentication, DNS and message delivery alongside the container deployment.",
+    architecture: ["Zimbra accounts", "CSV / API migration", "Mailcow / SOGo / Rspamd", "MX / SPF / DKIM / DMARC"],
+    implementation: ["Deployed and operated Docker-based Zimbra and Mailcow infrastructure.", "Created CSV import and API-based tooling for mailbox account migration.", "Worked with Nginx, ACME, SOGo, Rspamd and supporting services.", "Configured DNS and mail authentication records, including MX, SPF, DKIM and DMARC."],
+    troubleshooting: "Investigated quota-related account creation failures, SOGo login problems and HTTP 403 responses. Traced delivery issues through mail authentication, DNS and network configuration.",
+    result: "Built migration tooling and worked through account, authentication and delivery issues during the transition toward Mailcow.",
+    technologies: ["Zimbra", "Mailcow", "Docker", "SOGo", "Rspamd", "DNS", "REST APIs"], published: true,
+  },
+  {
+    id: "aws-client-ip-troubleshooting", title: "AWS ALB / Following the client IP", category: "Production troubleshooting",
+    summary: "Tracing incorrect rate limiting through an AWS load balancer, Nginx, PHP-FPM and Laravel.",
+    problem: "Laravel was identifying different visitors as the same proxy or load-balancer IP. IP-based rate limiting therefore grouped legitimate users together and returned HTTP 429 responses.",
+    architecture: ["Client", "AWS ALB", "Nginx / PHP-FPM", "Laravel"],
+    implementation: ["Traced request handling through the ALB, Nginx, PHP-FPM and Laravel layers.", "Inspected X-Forwarded-For, Nginx real_ip_header and remote_addr, and PHP-FPM REMOTE_ADDR.", "Investigated Laravel's trusted-proxy behavior and its effect on request IP detection.", "Identified the need for Laravel's proxy trust configuration to recognize the intended proxy chain."],
+    troubleshooting: "Connected the shared HTTP 429 failures to the way client identity propagated across proxies. Followed the headers and application interpretation through each layer.",
+    result: "Identified the proxy-trust configuration responsible for incorrect client identification and the configuration change needed for per-client rate limiting.",
+    technologies: ["AWS ALB", "Nginx", "PHP-FPM", "Laravel 12", "HTTP headers", "Rate limiting"], published: true,
+  },
+  {
+    id: "mssql-postgresql-migration", title: "MSSQL to PostgreSQL / Data migration", category: "Database infrastructure",
+    summary: "Cross-platform migration work spanning connectivity, credential encoding and schema compatibility.",
+    problem: "Moving data from Microsoft SQL Server to PostgreSQL required reliable connectivity between different database platforms and investigation of schema and tooling compatibility.",
+    architecture: ["Microsoft SQL Server", "pgloader / Docker", "PostgreSQL", "Connectivity / schema validation"],
+    implementation: ["Investigated the source database structure and prepared the PostgreSQL migration environment.", "Ran pgloader inside Docker and used DBeaver for database inspection.", "Diagnosed connection-string failures and encoded special characters in credentials where required.", "Validated connectivity and investigated schema and table migration issues."],
+    troubleshooting: "Separated connection configuration problems from migration compatibility issues. Identified credential characters that changed connection-string parsing and checked database access after correction.",
+    result: "Resolved connectivity obstacles and progressed the migration work through schema and compatibility investigation.",
+    technologies: ["Microsoft SQL Server", "PostgreSQL", "pgloader", "Docker", "DBeaver"], published: true,
+  },
+  {
+    id: "wazuh-security-monitoring", title: "Wazuh / Security visibility", category: "Security operations",
+    summary: "Endpoint monitoring and vulnerability investigation across Wazuh agents, the manager and OpenSearch.",
+    problem: "Security visibility depends on connectivity across agents, the manager and indexing infrastructure. Configuration and availability failures interrupted that path.",
+    architecture: ["Linux endpoints", "Wazuh agents", "Wazuh Manager", "OpenSearch"],
+    implementation: ["Installed and configured Wazuh agents and investigated manager address errors.", "Worked with Wazuh Manager infrastructure and component connectivity.", "Investigated vulnerability detection and CVE-related findings.", "Troubleshot OpenSearch availability and security initialization behavior."],
+    troubleshooting: "Investigated HTTP 503 responses and OpenSearch connectivity. Validated communication between monitoring components to distinguish agent configuration from indexing-service issues.",
+    result: "Supported endpoint visibility and vulnerability investigation by addressing configuration and connectivity issues in the monitoring infrastructure.",
+    technologies: ["Wazuh", "Wazuh Agents", "OpenSearch", "Docker", "Linux"], published: true,
+  },
+  {
+    id: "cicd-container-operations", title: "CI/CD / Deployment and operations", category: "Delivery automation",
+    summary: "Application deployment and operational workflows with self-hosted runners, Docker and Linux.",
+    problem: "Application releases and recurring container operations needed repeatable execution on the infrastructure where the workloads ran.",
+    architecture: ["GitHub / GitLab", "Self-hosted runner", "Docker build / deployment", "Linux application host"],
+    implementation: ["Built and maintained GitLab CI/CD and GitHub Actions deployment workflows.", "Worked with self-hosted runners for Linux application deployments and Docker operations.", "Troubleshot Docker Buildx and multi-stage application builds.", "Designed operational pipeline workflows for container management, including Kafka restart procedures."],
+    troubleshooting: "Investigated runner behavior, build tooling, container networking and application configuration. Distinguished build-time failures from runtime and deployment-host issues.",
+    result: "Automated application deployment tasks and developed operational workflow designs for repeatable container management.",
+    technologies: ["GitHub Actions", "GitLab CI/CD", "Docker", "Docker Buildx", "Linux", "Shell scripting"], published: true,
+  },
+  {
+    id: "probate-automation", title: "Probate scraper / Automation infrastructure", category: "Scheduled workloads",
+    summary: "Linux deployment, scheduled execution and service operations for a Python data-processing application.",
+    problem: "A Python scraping and data-processing application needed deployment, a compatible runtime and recurring execution with Google Drive integration.",
+    architecture: ["GitHub Actions", "Linux / Python environment", "systemd timer / service", "Data processing / Google Drive"],
+    implementation: ["Automated deployment with GitHub Actions and a self-hosted runner.", "Configured Python virtual environments and resolved runtime and venv dependency issues.", "Created a systemd service and timer for scheduled execution.", "Worked through Google Drive configuration and application scheduling behavior."],
+    troubleshooting: "Inspected service startup failures and application logs. Investigated Python version compatibility, missing venv tooling and the configuration dependency controlling Google Drive traversal.",
+    result: "Deployed the application with automated delivery and systemd-based scheduling, and resolved runtime and integration configuration issues.",
+    technologies: ["Python", "GitHub Actions", "systemd", "Linux", "Google Drive"], published: true,
+  },
+  {
+    id: "linux-hardening", title: "Linux / Hardening and audit trails", category: "System administration",
+    summary: "SSH access controls and audit coverage for authentication, privileged configuration and scheduled services.",
+    problem: "Linux hosts needed controlled administrative access and visibility into changes to sensitive system files and service configuration.",
+    architecture: ["SSH key authentication", "Users / sudo policy", "auditd rules", "Authentication / file events"],
+    implementation: ["Configured users, sudo privileges and SSH public-key authentication.", "Disabled root SSH access and password-based SSH login.", "Configured audit rules with auditctl and augenrules.", "Audited account, sudo, SSH, authorized key, cron and systemd configuration."],
+    troubleshooting: "Investigated SSH authentication behavior and failed login attempts. Checked audit coverage of sensitive files and authentication activity alongside service configuration.",
+    result: "Applied practical access hardening and audit rules to make sensitive administrative changes observable.",
+    technologies: ["Linux", "SSH", "sudo", "auditd", "auditctl", "augenrules", "systemd"], published: true,
+  },
+];
+
+export const techGroups = [
+  { name: "Infrastructure", items: ["Linux", "Docker", "Docker Compose", "Proxmox VE", "Nginx", "systemd"] },
+  { name: "Cloud & networking", items: ["AWS", "Application Load Balancer", "pfSense", "DNS", "NAT", "VPN", "SSL/TLS"] },
+  { name: "Data & messaging", items: ["PostgreSQL", "Cassandra", "Redis", "Microsoft SQL Server", "Kafka"] },
+  { name: "Observability", items: ["Grafana", "Loki", "Grafana Alloy", "Prometheus metrics"] },
+  { name: "Security", items: ["Wazuh", "OpenSearch", "auditd", "SSH hardening"] },
+  { name: "Delivery", items: ["GitLab CI/CD", "GitHub Actions", "Self-hosted runners", "Docker Buildx", "Git"] },
+  { name: "Application runtimes", items: ["Laravel", "PHP-FPM", "Node.js", "Next.js", "Vite", "Python"] },
+  { name: "Email platforms", items: ["Zimbra", "Mailcow", "SOGo", "Rspamd", "SPF / DKIM / DMARC"] },
 ];

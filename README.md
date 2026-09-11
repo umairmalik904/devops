@@ -1,6 +1,6 @@
 # Umair Malik — DevOps Portfolio
 
-A fast, data-driven Next.js portfolio designed for client acquisition and credible technical proof.
+A production portfolio focused on Umair Malik's hands-on DevOps, infrastructure, networking, observability and troubleshooting work.
 
 ## Run locally
 
@@ -22,15 +22,19 @@ docker run --rm -p 3000:3000 --name umair-portfolio umair-devops-portfolio
 
 Then open `http://localhost:3000`. Stop the container with `docker stop umair-portfolio`.
 
-## Edit content
+## Content management
 
-- `data/portfolio.ts` — services, case studies, projects, and technologies. The supplied project cards are deliberate placeholders: replace them only with approved, truthful details.
-- `app/page.tsx` — site copy, experience statement, contact form markup, social links, and the architecture illustration.
-- `app/layout.tsx` — SEO metadata and canonical URL. Replace `https://your-domain.example` with the final deployed domain.
+- `/admin` provides authenticated project management and the contact inbox.
+- `data/portfolio.ts` contains the initial project set used when the persistent data file does not yet exist.
+- Set `DATA_DIR` to a persistent, writable directory outside the container image.
 
 ## Contact form
 
-The form validates in the browser and displays a clear success state, but does not send email yet — this avoids pretending a message was delivered. Connect it to a preferred endpoint (Resend, Formspree, Basin, or a Next.js route) before relying on it for enquiries.
+The contact form stores enquiries in the persistent data directory. Authenticated administrators can read and remove them from `/admin`.
+
+## Required environment
+
+`APP_URL`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET`, and `DATA_DIR` are required in production. `ADMIN_PASSWORD_HASH` uses the format `salt:scryptHash`.
 
 ## Continuous deployment
 
