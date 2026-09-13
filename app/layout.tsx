@@ -13,6 +13,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const profile = { "@context": "https://schema.org", "@type": "Person", name: "Umair Malik", url: siteUrl, email: "mailto:umair@umairops.com", jobTitle: "DevOps and Infrastructure Engineer", sameAs: ["https://www.linkedin.com/in/umair-ops/", "https://github.com/umairmalik904"], knowsAbout: ["Linux", "Docker", "AWS", "CI/CD", "Proxmox", "Networking", "Observability", "Production operations"] };
+  const profile = { "@context": "https://schema.org", "@type": "Person", name: "Umair Malik", url: siteUrl, email: "mailto:umair%40umairops.com", jobTitle: "DevOps and Infrastructure Engineer", sameAs: ["https://www.linkedin.com/in/umair-ops/", "https://github.com/umairmalik904"], knowsAbout: ["Linux", "Docker", "AWS", "CI/CD", "Proxmox", "Networking", "Observability", "Production operations"] };
   return <html lang="en"><body>{children}<script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(profile) }} /></body></html>;
 }
